@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {createRxDatabase, RXDB_VERSION} from 'rxdb';
 import {getRxStorageSharedWorker} from "rxdb-premium/plugins/storage-worker";
 import {RxStorageIndexedDBStatics} from "rxdb-premium/plugins/storage-indexeddb";
@@ -64,8 +64,14 @@ const database = (async () => {
 
 function App() {
     const [data, setData] = useState(null);
+    const hasEffectRanRef = useRef(false);
 
     useEffect(() => {
+        if (hasEffectRanRef.current) {
+            return;
+        }
+        hasEffectRanRef.current = true;
+        
         (async () => {
             const db = await database;
             const data = await db.collections.documents.find().exec();
