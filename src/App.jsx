@@ -1,9 +1,12 @@
 import {useEffect, useState} from 'react'
-import {createRxDatabase} from 'rxdb';
+import {createRxDatabase, RXDB_VERSION} from 'rxdb';
 import {getRxStorageSharedWorker} from "rxdb-premium/plugins/storage-worker";
+import {RxStorageIndexedDBStatics} from "rxdb-premium/plugins/storage-indexeddb";
 import {faker} from '@faker-js/faker';
 
 import './App.css'
+
+console.info(`RxDB ${RXDB_VERSION}`);
 
 const storage = getRxStorageSharedWorker({
     workerInput: "/indexeddb.worker.js",
@@ -12,6 +15,7 @@ const storage = getRxStorageSharedWorker({
         type: "module",
         credentials: "omit",
     },
+    statics: RxStorageIndexedDBStatics,
 });
 
 const database = (async () => {
@@ -43,8 +47,8 @@ const database = (async () => {
             schema: schema
         }
     });
-    const data = await db.collections.documents.find().exec();
-    if (data.length === 0) {
+    const count = await db.collections.documents.count().exec();
+    if (count === 0) {
         const documents = [];
         const collection = db.documents;
         for (let i = 1; i < 1_000; i += 1) {
@@ -77,7 +81,7 @@ function App() {
 
     return (
         <>
-            <h1>RxDB + IndexedDB ❤️‍🩹Safari</h1>
+            <h1>RxDB {RXDB_VERSION} + IndexedDB ❤️‍🩹Safari</h1>
             <table>
                 <thead>
                 <tr>

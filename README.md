@@ -1,4 +1,4 @@
-# React + Vite
+# RxDB 14 + IndexedDB ❤️‍🩹 Safari
 
 ## Getting started
 
