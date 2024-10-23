@@ -1,20 +1,13 @@
 import {useEffect, useRef, useState} from 'react'
 import {createRxDatabase, RXDB_VERSION} from 'rxdb';
-import {getRxStorageSharedWorker} from "rxdb-premium/plugins/storage-worker";
+import {getRxStorageIndexedDB} from "rxdb-premium/plugins/storage-indexeddb";
 import {faker} from '@faker-js/faker';
 
 import './App.css'
 
 console.info(`RxDB ${RXDB_VERSION}`);
 
-const storage = getRxStorageSharedWorker({
-    workerInput: "/indexeddb.worker.js",
-    workerOptions: {
-        name: "heroes",
-        type: "module",
-        credentials: "omit",
-    },
-});
+const storage = getRxStorageIndexedDB();
 
 const database = (async () => {
     const schema = {
